@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "description": "A starting point for an ES6 React Webpack project",
   "scripts": {
-    "test": "./node_modules/.bin/babel-node ./node_modules/babel-istanbul/lib/cli.js cover --dir ./public/coverage ./node_modules/.bin/_mocha -- ./test --recursive && echo Coverage report available at: \"file://$(pwd)/public/coverage/lcov-report/index.html\""
+    "test": "./node_modules/.bin/babel-node ./node_modules/babel-istanbul/lib/cli.js cover --dir ./public/coverage ./node_modules/.bin/_mocha -- ./test --recursive && echo Coverage report available at: \"file://$(pwd)/public/coverage/lcov-report/index.html\"",
+    "test:strict": "npm run lint:standard && npm run test && ./node_modules/.bin/babel-node ./node_modules/babel-istanbul/lib/cli.js check-coverage --statement 100 --branch 100 --function 100",
+    "lint:standard": "./node_modules/standard/bin/cmd.js"
   },
   "author": "Rob Brennan <rob@therobbrennan.com>",
   "license": "ISC",
@@ -16,6 +18,7 @@
     "chai": "^3.2.0",
     "istanbul": "^0.4.2",
     "mocha": "^2.4.5",
+    "standard": "^6.0.8",
     "webpack": "^1.12.14"
   },
   "dependencies": {},
@@ -28,7 +31,8 @@
       "after",
       "afterEach",
       "it",
-      "expect"
+      "expect",
+      "import"
     ]
   }
 }
