@@ -9,6 +9,7 @@ app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'jade')
 app.set('port', (process.env.PORT || 3000))
 
+app.use(express.static(path.join(__dirname, 'public')))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
@@ -17,12 +18,11 @@ app.use(require('express-session')({
   resave: false,
   saveUninitialized: false
 }))
-app.use(express.static(path.join(__dirname, 'public')))
 
 app.get('/', function (req, res) {
   res.send('Hello World!')
 })
 
-app.listen(3000, function () {
+app.listen(app.get('port'), function () {
   console.log(`Server is online and listening on port ${app.get('port')}`)
 })
