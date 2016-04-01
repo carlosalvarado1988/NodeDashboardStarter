@@ -52,7 +52,8 @@ app.use(function (err, req, res, next) {
   res.render('error', {
     title: 'error',
     message: err.message,
-    error: {}
+    error: {},
+    user: req.user
   })
 })
 

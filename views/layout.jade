@@ -28,22 +28,19 @@ html(lang='en')
               span.icon-bar
               span.icon-bar
               span.icon-bar
-            a.navbar-brand(href='#') [DEMO]
+            a.navbar-brand(href='/') [DEMO]
 
           .navbar-collapse.collapse
-            ul.nav.navbar-nav
+            ul.nav.navbar-nav              
             ul.nav.navbar-nav.navbar-right
-              li
-                a(href='#') Main
-              li
-                a(href='#') Events
-              li.dropdown
-                a.dropdown-toggle(href='#', data-toggle='dropdown')
-                  | Projects 
-                  span.caret
-                ul.dropdown-menu(role='menu')
-                  li
-                    a(href='#') Express JS Example
+              if(!user)
+                li
+                  a(href="/login") Login
+                li
+                  a(href="/register") Register
+              else
+                li
+                  a(href="/logout") Logged in as #{user.username}
 
       block content
 
