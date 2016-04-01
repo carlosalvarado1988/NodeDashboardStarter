@@ -9,8 +9,12 @@ Iteration 01
   - Bring test coverage to 100% for a default route
 + Initial routes
   - Public
+
+---
+TODO
++ Routes
+  - Register
   - Login
   - Dashboard
-+ Implement local authentication using hard-coded credentials
-+ Display protected information specific to one user
-
+    + Implement local authentication using hard-coded credentials
+    + Display protected information specific to one user
