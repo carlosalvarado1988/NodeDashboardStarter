@@ -26,14 +26,9 @@ The goal of this application is to have 100% test coverage. We are using the pop
 
     $ npm run test:strict
 
-### Bundling and Running Your React Application
-If you are running this application for the first time, you can compile and view the sample application directly from your local environment with the built-in [webpack-dev-server](https://webpack.github.io/docs/webpack-dev-server.html) by running:
+### Running Your Application
+To run the web server:
 
     $ npm start
 
-To view your sample app, open your web browser and view [http://localhost:8080/](http://localhost:8080/)
-
-If you are incorporating this into another project and just want to have webpack running in the background, you can also run the build script with:
-
-    $ npm run build
-
+To view your sample app, open your web browser and view [http://localhost:3000/](http://localhost:3000/)
