@@ -1,4 +1,4 @@
-This project is currently in progress. Please check back when [ExpressJS](http://expressjs.com) is actually incorporated. Right now it is just a basic [Node.js](https://nodejs.org)-based & [ES6](https://nodejs.org/en/docs/es6/) starting point.
+This project is currently in progress. Please check back when [ExpressJS](http://expressjs.com) is actually incorporated. Right now it is just a basic [Node.js](https://nodejs.org) & [ES6](https://nodejs.org/en/docs/es6/) starting point.
 
 Please [create an issue](https://github.com/TheRobBrennan/express_es6_dashboard_starter/issues) if you would like to offer any feedback or suggestions.
 
