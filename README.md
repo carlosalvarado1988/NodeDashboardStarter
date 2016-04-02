@@ -1,6 +1,8 @@
 # Welcome
 This project is meant to serve as a starting point for [Node.js](https://nodejs.org)-based [ExpressJS](http://expressjs.com) & [ES6](https://nodejs.org/en/docs/es6/) projects.
 
+Currently this app uses the [Jade templating engine](http://jade-lang.com) for rendering our views. [Bootstrap](http://getbootstrap.com) is used for the front-end framework.
+
 [Mocha](https://mochajs.org) is used for unit-testing our sample application. 
 
 Test coverage reports are generated with [babel-istanbul](https://www.npmjs.com/package/babel-istanbul) - a fork of the popular [Istanbul](https://www.npmjs.com/package/istanbul) code-coverage tool.
