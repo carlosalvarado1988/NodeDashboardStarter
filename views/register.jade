@@ -3,13 +3,18 @@ extends layout
 block content
   .container
     .page
-      h1 Register
-
-      form(role='form', action="/register",method="post", style='max-width: 300px;')
+      form(role='form', action='/register', method='POST')
+        legend Register
         .form-group
-            input.form-control(type='text', name="username", placeholder='Enter Username')
+          label(for='username') Username
+          input.form-control(type='text', name='username', autofocus)
         .form-group
-          input.form-control(type='password', name="password", placeholder='Password')
-        button.btn.btn-default(type='submit') Submit
-        a(href='/')
-          button.btn.btn-primary(type="button") Cancel
+          label(for='email') Email
+          input.form-control(type='text', name='email')
+        .form-group
+          label(for='password') Password
+          input.form-control(type='password', name='password')
+        .form-group
+          label(for='confirm') Confirm Password
+          input.form-control(type='password', name='confirm')
+        button.btn.btn-primary(type='submit') Signup
