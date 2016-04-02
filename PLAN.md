@@ -15,12 +15,11 @@ This should be an aggressively changing document used for rapidly developing new
     + Implement local authentication using hard-coded credentials
     + Display protected information specific to one user
 
-## Iteration 02 [IN PROGRESS]
+## Iteration 02
 + Implement password reset functionality
++ Password reset over email
 
 ---
 TODO
-+ Password reset over email
-+ Account Registration
-  - Enforce matching password values
++ Refactor password reset functionality
 + 100% test coverage
