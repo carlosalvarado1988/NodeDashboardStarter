@@ -6,7 +6,9 @@ const app = express()
 
 const path = require('path')
 const logger = require('morgan')
+const flash = require('express-flash')
 const nodemailer = require('nodemailer')
+const transporter = nodemailer.createTransport('smtps://user%40example.com:csmmbw1jtfb@smtp.gmail.com')
 const async = require('async')
 const crypto = require('crypto')
 
@@ -37,6 +39,7 @@ app.use(require('express-session')({
   resave: false,
   saveUninitialized: false
 }))
+app.use(flash())
 app.use(logger('dev'))
 app.use(passport.initialize())
 app.use(passport.session())
@@ -47,6 +50,56 @@ passport.use(new LocalStrategy(Account.authenticate()))
 passport.serializeUser(Account.serializeUser())
 passport.deserializeUser(Account.deserializeUser())
 
+// Forgotten password middleware
+app.post('/forgot', (req, res, next) => {
+  async.waterfall([
+    function (done) {
+      crypto.randomBytes(20, function (err, buf) {
+        var token = buf.toString('hex')
+        done(err, token)
+      })
+    },
+    function (token, done) {
+      Account.findOne({ email: req.body.email }, (err, user) => {
+        if (err) done(err)
+        if (!user) {
+          req.flash('error', 'No account with that email address exists.')
+          return res.redirect('/forgot')
+        }
+
+        user.resetPasswordToken = token
+        user.resetPasswordExpires = Date.now() + 3600000 // 1 hour
+
+        user.save(function (err) {
+          done(err, token, user)
+        })
+      })
+    },
+    function (token, user, done) {
+      let mailOptions = {
+        to: user.email,
+        from: 'no-reply@mail.com',
+        subject: '[REQUESTED] Password Reset',
+        text: 'You are receiving this because you (or someone else) requested the reset of the password for your account.\n\n' +
+          'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+          'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+          'If you did not make this request, please disregard this email and your password will remain unchanged.\n'
+      }
+
+      // send mail with defined transport object
+      transporter.sendMail(mailOptions, (err, info) => {
+        if (err) { done(err) }
+        console.log('Message sent: ' + info.response)
+        done()
+      })
+    }
+  ], function (err) {
+    if (err) return next(err)
+    res.redirect('/')
+  })
+})
+
+// Routes
 const routes = require('./routes/index')
 app.use('/', routes)
 
@@ -64,6 +117,7 @@ if (app.get('env') === 'development') {
   app.use(function (err, req, res, next) {
     res.status(err.status || 500)
     res.render('error', {
+      title: '',
       message: err.message,
       error: err
     })
@@ -75,7 +129,7 @@ if (app.get('env') === 'development') {
 app.use(function (err, req, res, next) {
   res.status(err.status || 500)
   res.render('error', {
-    title: 'error',
+    title: 'Error',
     message: err.message,
     error: {},
     user: req.user,

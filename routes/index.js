@@ -1,7 +1,12 @@
+'use strict'
 const express = require('express')
 const router = express.Router()
 
+const nodemailer = require('nodemailer')
+const transporter = nodemailer.createTransport('smtps://user%40example.com:csmmbw1jtfb@smtp.gmail.com')
 const passport = require('passport')
+const async = require('async')
+
 const Account = require('../models/account')
 
 const ensureAuthenticated = (req, res, next) => {
@@ -17,6 +22,76 @@ router.get('/', (req, res) => {
   } else {
     res.render('index', {title: '', user: req.user})
   }
+})
+
+/* Forgot password */
+router.get('/forgot', (req, res) => {
+  res.render('forgot', {title: '', user: req.user})
+})
+
+router.get('/reset/:token', function (req, res) {
+  Account.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, (err, user) => {
+    if (err) {
+      req.flash('error', `An error occurred while attempting to reset your account: ${err}`)
+      return res.redirect('/forgot')
+    }
+    if (!user) {
+      req.flash('error', 'Password reset token is invalid or has expired.')
+      return res.redirect('/forgot')
+    }
+    res.render('reset', {
+      title: '',
+      user: req.user
+    })
+  })
+})
+
+router.post('/reset/:token', function (req, res) {
+  async.waterfall([
+    (done) => {
+      Account.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, (err, user) => {
+        if (!user || err) {
+          req.flash('error', 'Password reset token is invalid or has expired.')
+        }
+
+        user.password = req.body.password
+        user.resetPasswordToken = undefined
+        user.resetPasswordExpires = undefined
+
+        user.save((err) => {
+          if (err) {
+            done(err)
+          }
+          // console.log('Logging in the user...Did the password save?')
+          req.logIn(user, function (err) {  // Log in the user
+            user.setPassword(req.body.password, () => {
+              user.save() // Save the new password
+              done(err, user)
+            })
+          })
+        })
+      })
+    },
+    (user, done) => {
+      let mailOptions = {
+        to: user.email,
+        from: 'no-reply@mail.com',
+        subject: '[CONFIRMED] Your password has been changed',
+        text: 'Hello,\n\n' +
+          'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
+      }
+
+      // send mail with defined transport object
+      transporter.sendMail(mailOptions, (err, info) => {
+        if (err) { done(err) }
+        console.log('Message sent: ' + info.response)
+        done()
+      })
+    }
+  ], (err) => {
+    if (err) { console.error(`Error confirming password update: ${err}`) }
+    res.redirect('/')
+  })
 })
 
 /* Account registration */
