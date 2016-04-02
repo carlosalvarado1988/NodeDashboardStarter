@@ -3,6 +3,8 @@ This project is meant to serve as a starting point for [Node.js](https://nodejs.
 
 Currently this app uses the [Jade templating engine](http://jade-lang.com) for rendering our views. [Bootstrap](http://getbootstrap.com) is used for the front-end framework.
 
+Account management is handled via [MongoDB](https://www.mongodb.org). This application requires you to supply the appropriate credentials to connect to a [MongoDB](https://www.mongodb.org) instance **or** that you have [MongoDB](https://www.mongodb.org) running locally.
+
 [Mocha](https://mochajs.org) is used for unit-testing our sample application. 
 
 Test coverage reports are generated with [babel-istanbul](https://www.npmjs.com/package/babel-istanbul) - a fork of the popular [Istanbul](https://www.npmjs.com/package/istanbul) code-coverage tool.
