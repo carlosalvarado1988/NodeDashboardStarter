@@ -1,7 +1,11 @@
 {
   "name": "express_es6_dashboard_starter",
-  "version": "0.0.0",
-  "description": "A starting point for an ES6 React Webpack project",
+  "version": "0.0.1",
+  "description": "A starting point for an ES6 ExpressJS project",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TheRobBrennan/express_es6_dashboard_starter"
+  },
   "scripts": {
     "start": "node server",
     "test": "./node_modules/.bin/babel-node ./node_modules/babel-istanbul/lib/cli.js cover --dir ./public/coverage ./node_modules/.bin/_mocha -- ./test --recursive && echo Coverage report available at: \"file://$(pwd)/public/coverage/lcov-report/index.html\"",
@@ -23,12 +27,16 @@
     "webpack": "^1.12.14"
   },
   "dependencies": {
+    "async": "^2.0.0-rc.2",
+    "bcrypt": "^0.8.5",
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.0",
     "cookie-parser": "^1.4.1",
     "express": "^4.13.4",
     "express-session": "^1.13.0",
     "mongoose": "^4.4.10",
     "morgan": "^1.7.0",
+    "nodemailer": "^2.3.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^4.0.0"

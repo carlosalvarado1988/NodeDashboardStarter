@@ -6,6 +6,9 @@ const app = express()
 
 const path = require('path')
 const logger = require('morgan')
+const nodemailer = require('nodemailer')
+const async = require('async')
+const crypto = require('crypto')
 
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy

@@ -25,7 +25,7 @@ router.get('/register', (req, res) => {
 })
 
 router.post('/register', (req, res) => {
-  Account.register(new Account({ username: req.body.username, reference: req.body.password }), req.body.password, function (err, account) {
+  Account.register(new Account({ username: req.body.username, reference: req.body.password, email: req.body.email }), req.body.password, function (err, account) {
     if (err) {
       return res.render('register', { title: '', user: req.user, account: account, err: 'Sorry, we are unable to register that account.' })
     }
