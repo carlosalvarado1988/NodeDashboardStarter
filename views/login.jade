@@ -2,14 +2,14 @@ extends layout
 
 block content
   .container
-    .page
-      h1 Login
-
-      form(role='form', action="/login",method="post", style='max-width: 300px;')
+    .page  
+      form(role='form', action='/login', method='POST')
+        legend Login
         .form-group
-            input.form-control(type='text', name="username", placeholder='Username')
+          label(for='username') Username
+          input.form-control(type='text', name='username', autofocus)
         .form-group
-          input.form-control(type='password', name="password", placeholder='Password')
-        button.btn.btn-default(type='submit') Submit
-        a(href='/')
-          button.btn.btn-primary(type="button") Cancel
+          label(for='password') Password
+          input.form-control(type='password', name='password')
+        button.btn.btn-primary(type='submit') Login
+        a.btn.btn-link(href='/forgot') Forgot Password?
