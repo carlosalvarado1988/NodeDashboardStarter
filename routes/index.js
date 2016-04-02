@@ -15,21 +15,21 @@ router.get('/', (req, res) => {
   if (req.user) {
     res.redirect('/dashboard')
   } else {
-    res.render('index', {title: '', user: req.user, csrf: res.locals._csrf})
+    res.render('index', {title: '', user: req.user})
   }
 })
 
 /* Account registration */
 router.get('/register', (req, res) => {
   // res.redirect('/login')
-  res.render('register', {title: '', user: req.user, csrf: res.locals._csrf})
+  res.render('register', {title: '', user: req.user})
 })
 
 router.post('/register', (req, res) => {
   // res.redirect('/login')
   Account.register(new Account({ username: req.body.username }), req.body.password, function (err, account) {
     if (err) {
-      return res.render('register', { title: '', user: req.user, account: account, err: 'Sorry, we are unable to register that account.', csrf: res.locals._csrf })
+      return res.render('register', { title: '', user: req.user, account: account, err: 'Sorry, we are unable to register that account.', csrf: req.csrfToken() })
     }
 
     passport.authenticate('local')(req, res, function () {
@@ -42,7 +42,7 @@ router.post('/register', (req, res) => {
 router.get('/login', (req, res) => {
   if (!req.user) {
     // console.log(req.csrfToken())
-    return res.render('login', { title: '', user: req.user, csrf: req.csrfToken() })
+    return res.render('login', { title: '', user: req.user })
   }
 
   return res.redirect('/')
@@ -61,7 +61,7 @@ router.get('/logout', (req, res) => {
 
 /* Routes requiring authentication */
 router.get('/dashboard', ensureAuthenticated, (req, res) => {
-  res.render('dashboard', { title: '', user: req.user, csrf: res.locals._csrf })
+  res.render('dashboard', { title: '', user: req.user })
 })
 
 // Catch-all route

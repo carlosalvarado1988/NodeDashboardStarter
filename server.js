@@ -6,12 +6,11 @@ const app = express()
 
 const path = require('path')
 const logger = require('morgan')
-const csrf = require('csurf')
 
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 
-const MONGO_LOCAL = 'mongodb://localhost/adseek'
+const MONGO_LOCAL = 'mongodb://localhost/sample'
 const mongoURI = MONGO_LOCAL
 const mongoose = require('mongoose')
 mongoose.connect(mongoURI, function (err) {
@@ -39,12 +38,6 @@ app.use(logger('dev'))
 app.use(passport.initialize())
 app.use(passport.session())
 
-// CSRF
-app.use(csrf(), function (req, res, next) {
-  res.locals._csrf = req.csrfToken()
-  next()
-})
-
 // passport config
 const Account = require('./models/account')
 passport.use(new LocalStrategy(Account.authenticate()))
@@ -62,14 +55,6 @@ app.use(function (req, res, next) {
 })
 
 // error handlers
-app.use(function (err, req, res, next) {  // Bad CSRF token
-  if (err.code !== 'EBADCSRFTOKEN') return next(err)
-
-  // handle CSRF token errors here
-  res.status(403)
-  res.send('HTTP request tampered with. Invalid CSRF token.')
-})
-
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
