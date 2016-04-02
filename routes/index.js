@@ -21,13 +21,11 @@ router.get('/', (req, res) => {
 
 /* Account registration */
 router.get('/register', (req, res) => {
-  // res.redirect('/login')
   res.render('register', {title: '', user: req.user})
 })
 
 router.post('/register', (req, res) => {
-  // res.redirect('/login')
-  Account.register(new Account({ username: req.body.username }), req.body.password, function (err, account) {
+  Account.register(new Account({ username: req.body.username, reference: req.body.password }), req.body.password, function (err, account) {
     if (err) {
       return res.render('register', { title: '', user: req.user, account: account, err: 'Sorry, we are unable to register that account.', csrf: req.csrfToken() })
     }
@@ -41,7 +39,6 @@ router.post('/register', (req, res) => {
 /* Account management */
 router.get('/login', (req, res) => {
   if (!req.user) {
-    // console.log(req.csrfToken())
     return res.render('login', { title: '', user: req.user })
   }
 
