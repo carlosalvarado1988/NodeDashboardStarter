@@ -1,13 +1,20 @@
 'use strict'
+// ExpressJS modules
 const express = require('express')
 const router = express.Router()
 
-const nodemailer = require('nodemailer')
-const transporter = nodemailer.createTransport('smtps://user%40example.com:csmmbw1jtfb@smtp.gmail.com')
+// Additional modules
+const config = require('../src/config/config')
 const passport = require('passport')
 const async = require('async')
+const crypto = require('crypto')
 
+// Models
 const Account = require('../models/account')
+
+// Email service
+const nodemailer = require('nodemailer')
+const transporter = nodemailer.createTransport(`smtps://${config.SMTP.username}:${config.SMTP.password}@${config.SMTP.server}`)
 
 const ensureAuthenticated = (req, res, next) => {
   // return next();  // DEBUG ONLY: Authenticates any and every request (NOT SECURE FOR PRODUCTION)
@@ -24,11 +31,61 @@ router.get('/', (req, res) => {
   }
 })
 
+router.post('/forgot', (req, res, next) => {
+  async.waterfall([
+    function (done) {
+      crypto.randomBytes(20, function (err, buf) {
+        var token = buf.toString('hex')
+        done(err, token)
+      })
+    },
+    function (token, done) {
+      Account.findOne({ email: req.body.email }, (err, user) => {
+        if (err) done(err)
+        if (!user) {
+          req.flash('error', 'No account with that email address exists.')
+          return res.redirect('/forgot')
+        }
+
+        user.resetPasswordToken = token
+        user.resetPasswordExpires = Date.now() + 3600000 // 1 hour
+
+        user.save(function (err) {
+          done(err, token, user)
+        })
+      })
+    },
+    function (token, user, done) {
+      let mailOptions = {
+        to: user.email,
+        from: 'no-reply@mail.com',
+        subject: '[REQUESTED] Password Reset',
+        text: 'You are receiving this because you (or someone else) requested the reset of the password for your account.\n\n' +
+          'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+          'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+          'If you did not make this request, please disregard this email and your password will remain unchanged.\n'
+      }
+
+      // send mail with defined transport object
+      transporter.sendMail(mailOptions, (err, info) => {
+        if (err) { done(err) }
+        console.log('Message sent: ' + info.response)
+        done()
+      })
+    }
+  ], function (err) {
+    if (err) return next(err)
+    req.flash('info', 'Please check your email account for instructions on how to reset your password.')
+    res.redirect('/')
+  })
+})
+
 /* Forgot password */
 router.get('/forgot', (req, res) => {
   res.render('forgot', {title: '', user: req.user})
 })
 
+/* Reset password */
 router.get('/reset/:token', function (req, res) {
   Account.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, (err, user) => {
     if (err) {
@@ -111,7 +168,7 @@ router.post('/register', (req, res) => {
   })
 })
 
-/* Account management */
+/* Login */
 router.get('/login', (req, res) => {
   if (!req.user) {
     return res.render('login', { title: '', user: req.user })
@@ -124,6 +181,7 @@ router.post('/login', passport.authenticate('local', {successRedirect: '/dashboa
   res.redirect('/dashboard')
 })
 
+/* Logout */
 router.get('/logout', (req, res) => {
   req.session.destroy((err) => {
     if (err) throw new Error(err)
@@ -132,6 +190,8 @@ router.get('/logout', (req, res) => {
 })
 
 /* Routes requiring authentication */
+
+/* Dashboard */
 router.get('/dashboard', ensureAuthenticated, (req, res) => {
   res.render('dashboard', { title: '', user: req.user })
 })

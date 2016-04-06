@@ -20,6 +20,9 @@ This should be an aggressively changing document used for rapidly developing new
 + Password reset over email
 
 ---
+## Iteration 03
++ Refactor password reset functionality
+
 TODO
 + Refactor password reset functionality
 + 100% test coverage
