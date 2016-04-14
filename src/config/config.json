@@ -1,7 +1,7 @@
 {
   "SMTP": {
-    "username": "",
-    "password": "",
-    "server": ""
+    "username": "rob@therobbrennan.com",
+    "password": "csmmbw1jtfb",
+    "server": "smtp.gmail.com"
   }
 }
