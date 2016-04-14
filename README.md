@@ -9,6 +9,12 @@ Account management is handled via [MongoDB](https://www.mongodb.org). This appli
 
 Test coverage reports are generated with [babel-istanbul](https://www.npmjs.com/package/babel-istanbul) - a fork of the popular [Istanbul](https://www.npmjs.com/package/istanbul) code-coverage tool.
 
+BONUS: A visual representation of server-side dependencies for the app can be found by running:
+
+    $ npm run report:dependencies
+
+This uses the [node disk usage](https://github.com/groupon/ndu) tool and generates an HTML page for you to mouseover and see all of the dependencies of your project.
+ 
 Please [create an issue](https://github.com/TheRobBrennan/express_es6_dashboard_starter/issues) if you would like to offer any feedback or suggestions.
 
 ## Getting started
